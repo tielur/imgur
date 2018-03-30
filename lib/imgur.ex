@@ -2,13 +2,13 @@ defmodule Imgur do
   @doc """
   Uploads a single image.
   """
-  def upload_image(file_path) do
+  def upload_image(image) do
     # We're using string interpolation here.
     # #{id} means it inserts the value of id
     url = "https://api.imgur.com/3/image"
     headers = ["Authorization": "Client-ID #{client_id()  }"]
 
-    case HTTPoison.post(url, {:file, file_path}, headers, []) do
+    case HTTPoison.post(url, {:form, [{"image", image}]}, headers, []) do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
         # HTTP status 200 (OK) and we have a body
         case Poison.decode(body) do
